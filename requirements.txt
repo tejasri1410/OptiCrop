@@ -1,0 +1,13 @@
+# ====================================================================================
+# OptiCrop - Python Dependencies
+# Install all of these with:   pip install -r requirements.txt
+# ====================================================================================
+
+Flask==3.0.3          # Web framework - powers the backend server & routing
+numpy==1.26.4          # Numerical computing - array operations, math
+pandas==2.2.2          # Data loading, cleaning & manipulation (DataFrames)
+scikit-learn==1.5.0    # Machine Learning - model training, scaling, encoding, metrics
+scipy==1.13.1          # Scientific computing - used for statistical outlier detection
+matplotlib==3.9.0      # Data visualization - charts & plots for EDA
+seaborn==0.13.2        # Statistical visualization - heatmaps, boxplots, distributions
+joblib==1.4.2          # Saving/loading trained ML models efficiently

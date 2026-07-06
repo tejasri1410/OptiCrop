@@ -1,0 +1,96 @@
+<!--
+====================================================================================
+ FILE    : base.html
+ PURPOSE : This is the MASTER LAYOUT TEMPLATE. Every other page (index.html,
+           recommend.html, result.html, etc.) "extends" this file using Jinja2's
+           template-inheritance tag, so we don't repeat the same navbar/footer
+           HTML code on every single page (this is the "DRY" - Don't Repeat
+           Yourself - principle of good coding).
+
+           The "block content" placeholder below is filled in by each child
+           page with its own unique content, while the navbar, footer, and
+           head section (CSS/fonts/icons) stay exactly the same everywhere.
+====================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OptiCrop | Smart Agricultural Production Optimization Engine{% endblock %}</title>
+    <meta name="description" content="OptiCrop is a smart agricultural optimization engine that recommends crops, assesses suitability, and supports agricultural research using soil, climate, and crop data.">
+    <meta name="theme-color" content="#2F5D3A">
+
+    <!-- Google Fonts: 'Fraunces' (warm, earthy display serif) for headings,
+         'Inter' for body text, 'JetBrains Mono' for data/figures -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome icons (used throughout the interface for visual clarity) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Our custom stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ============================ NAVIGATION BAR ============================ -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-logo">
+                <i class="fa-solid fa-seedling"></i> OptiCrop
+            </a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-burger"><i class="fa-solid fa-bars"></i></label>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="{{ url_for('recommend_form') }}"><i class="fa-solid fa-wheat-awn"></i> Recommend Crop</a></li>
+                <li><a href="{{ url_for('suitability_form') }}"><i class="fa-solid fa-magnifying-glass-chart"></i> Suitability Check</a></li>
+                <li><a href="{{ url_for('research_dashboard') }}"><i class="fa-solid fa-chart-line"></i> Research Dashboard</a></li>
+                <li><a href="{{ url_for('about') }}"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ====================== FLASH MESSAGES (form errors / alerts) ====================== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        <i class="fa-solid fa-triangle-exclamation"></i> {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ============================ MAIN PAGE CONTENT ============================ -->
+    <!-- Each child template injects its unique content into this block -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ============================ FOOTER ============================ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <i class="fa-solid fa-seedling"></i> OptiCrop
+                <p>Smart Agricultural Production Optimization Engine</p>
+            </div>
+            <div class="footer-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('recommend_form') }}">Recommend</a>
+                <a href="{{ url_for('research_dashboard') }}">Research</a>
+                <a href="{{ url_for('about') }}">About</a>
+            </div>
+            <div class="footer-tech">
+                <span>Built with Python, Flask, Scikit-learn, NumPy, Pandas, SciPy, Matplotlib &amp; Seaborn</span>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 OptiCrop &mdash; AIML Academic Project</div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

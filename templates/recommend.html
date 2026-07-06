@@ -1,0 +1,83 @@
+<!--
+====================================================================================
+ FILE    : recommend.html
+ PURPOSE : Scenario 1 -> "Smart Crop Recommendation for Farmers"
+           Displays an input form where a farmer enters their soil & climate
+           readings. On submission, this form POSTs to the "/predict" route
+           in app.py, which runs the ML model and shows result.html.
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | Recommend a Crop{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-page-header">
+        <span class="page-badge"><i class="fa-solid fa-user-tie"></i> Scenario 1</span>
+        <h1>Smart Crop Recommendation</h1>
+        <p>Enter your soil test results and local climate conditions below. Our AI model
+           will analyze the data and recommend the crop most likely to give you maximum yield.</p>
+    </div>
+
+    <div class="form-card">
+        <form action="{{ url_for('predict') }}" method="POST" class="input-form">
+
+            <div class="form-grid">
+                <!-- Each input below corresponds to one feature our ML model was trained on -->
+                <div class="form-group">
+                    <label for="N"><i class="fa-solid fa-flask"></i> Nitrogen (N) <span class="unit">kg/ha</span></label>
+                    <input type="number" step="any" id="N" name="N" placeholder="e.g. 90" required
+                           value="{{ form_values.N if form_values else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="P"><i class="fa-solid fa-flask"></i> Phosphorous (P) <span class="unit">kg/ha</span></label>
+                    <input type="number" step="any" id="P" name="P" placeholder="e.g. 42" required
+                           value="{{ form_values.P if form_values else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="K"><i class="fa-solid fa-flask"></i> Potassium (K) <span class="unit">kg/ha</span></label>
+                    <input type="number" step="any" id="K" name="K" placeholder="e.g. 43" required
+                           value="{{ form_values.K if form_values else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="temperature"><i class="fa-solid fa-temperature-half"></i> Temperature <span class="unit">°C</span></label>
+                    <input type="number" step="any" id="temperature" name="temperature" placeholder="e.g. 25.5" required
+                           value="{{ form_values.temperature if form_values else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="humidity"><i class="fa-solid fa-droplet"></i> Humidity <span class="unit">%</span></label>
+                    <input type="number" step="any" id="humidity" name="humidity" placeholder="e.g. 80" required
+                           value="{{ form_values.humidity if form_values else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="ph"><i class="fa-solid fa-vial"></i> Soil pH <span class="unit">0-14</span></label>
+                    <input type="number" step="any" id="ph" name="ph" placeholder="e.g. 6.5" required
+                           value="{{ form_values.ph if form_values else '' }}">
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label for="rainfall"><i class="fa-solid fa-cloud-rain"></i> Rainfall <span class="unit">mm</span></label>
+                    <input type="number" step="any" id="rainfall" name="rainfall" placeholder="e.g. 200" required
+                           value="{{ form_values.rainfall if form_values else '' }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" {% if not model_loaded %}disabled{% endif %}>
+                <i class="fa-solid fa-magnifying-glass"></i> Recommend Best Crop
+            </button>
+        </form>
+    </div>
+
+    <div class="info-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>Tip: These values typically come from a soil testing lab report and your local
+           weather station's seasonal averages. Not sure about exact numbers? Use approximate
+           regional averages for the best guidance.</p>
+    </div>
+</section>
+{% endblock %}

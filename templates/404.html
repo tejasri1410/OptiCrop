@@ -1,0 +1,23 @@
+<!--
+====================================================================================
+ FILE    : 404.html
+ PURPOSE : Custom, friendly "Page Not Found" error page (instead of Flask's
+           plain default error page), shown whenever a user visits a URL
+           that doesn't exist in our app.
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | Page Not Found{% endblock %}
+
+{% block content %}
+<section class="form-page" style="text-align:center;">
+    <div class="result-hero-icon" style="font-size:4rem; margin-bottom:1rem;">
+        <i class="fa-solid fa-map-location-dot"></i>
+    </div>
+    <h1>404 - Field Not Found</h1>
+    <p>Looks like this page has wandered off the farm. Let's get you back on track.</p>
+    <a href="{{ url_for('home') }}" class="btn btn-primary" style="margin-top:1.5rem; display:inline-flex;">
+        <i class="fa-solid fa-house"></i> Back to Home
+    </a>
+</section>
+{% endblock %}

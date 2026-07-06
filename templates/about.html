@@ -1,0 +1,74 @@
+<!--
+====================================================================================
+ FILE    : about.html
+ PURPOSE : Explains the OptiCrop project's purpose, background, tech stack,
+           and the three scenarios it addresses, in an easy-to-read format.
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | About the Project{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-page-header">
+        <span class="page-badge"><i class="fa-solid fa-circle-info"></i> About</span>
+        <h1>About OptiCrop</h1>
+        <p>Smart Agricultural Production Optimization Engine</p>
+    </div>
+
+    <div class="about-card">
+        <h3><i class="fa-solid fa-bullseye"></i> Project Purpose</h3>
+        <p>
+            OptiCrop is an advanced, data-driven software system that utilizes Machine Learning
+            to optimize agricultural production for different crops. By integrating key
+            environmental factors such as Nitrogen (N), Phosphorous (P), Potassium (K) levels,
+            soil temperature, humidity, pH, rainfall, and crop types, OptiCrop provides
+            intelligent recommendations to farmers for maximizing yields and resource efficiency.
+        </p>
+        <p>
+            The knowledge and insights gained through OptiCrop can be utilized by agricultural
+            researchers, policymakers, and stakeholders to advance understanding of
+            crop-environment interactions and inform evidence-based agricultural strategies.
+        </p>
+    </div>
+
+    <div class="about-card">
+        <h3><i class="fa-solid fa-diagram-project"></i> Scenarios Covered</h3>
+        <ul class="about-list">
+            <li><strong>Scenario 1 - Smart Crop Recommendation:</strong> Farmers enter soil & environmental
+                details and receive AI-recommended crops for maximum yield.</li>
+            <li><strong>Scenario 2 - Crop Suitability & Environmental Assessment:</strong> Users check whether
+                current conditions suit a specific crop they have in mind.</li>
+            <li><strong>Scenario 3 - Agricultural Research & Policy Planning:</strong> Researchers analyze
+                crop-environment relationships through interactive visual dashboards.</li>
+        </ul>
+    </div>
+
+    <div class="about-card">
+        <h3><i class="fa-solid fa-layer-group"></i> Technology Stack</h3>
+        <div class="tech-grid">
+            <div class="tech-item"><i class="fa-solid fa-code"></i> Python</div>
+            <div class="tech-item"><i class="fa-solid fa-server"></i> Flask (Web Framework)</div>
+            <div class="tech-item"><i class="fa-solid fa-calculator"></i> NumPy</div>
+            <div class="tech-item"><i class="fa-solid fa-table"></i> Pandas</div>
+            <div class="tech-item"><i class="fa-solid fa-brain"></i> Scikit-learn</div>
+            <div class="tech-item"><i class="fa-solid fa-chart-line"></i> Matplotlib</div>
+            <div class="tech-item"><i class="fa-solid fa-chart-pie"></i> Seaborn</div>
+            <div class="tech-item"><i class="fa-solid fa-square-root-variable"></i> SciPy</div>
+        </div>
+    </div>
+
+    <div class="about-card">
+        <h3><i class="fa-solid fa-sitemap"></i> How the ML Pipeline Works</h3>
+        <ol class="about-list about-list-numbered">
+            <li>Dataset of 2,200 samples across 22 crops is generated/loaded (N, P, K, temperature, humidity, ph, rainfall).</li>
+            <li>Exploratory Data Analysis (EDA) is performed using Pandas, Matplotlib & Seaborn.</li>
+            <li>Features are scaled using <code>StandardScaler</code>; crop labels are encoded using <code>LabelEncoder</code>.</li>
+            <li>Data is split 80/20 into training and testing sets.</li>
+            <li>A <code>RandomForestClassifier</code> (300 trees) is trained on the training set.</li>
+            <li>The model is evaluated using accuracy, a classification report, and a confusion matrix.</li>
+            <li>The trained model, scaler, and encoder are saved with <code>joblib</code> for the Flask backend to load and serve predictions.</li>
+        </ol>
+    </div>
+</section>
+{% endblock %}

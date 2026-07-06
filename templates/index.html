@@ -1,0 +1,135 @@
+<!--
+====================================================================================
+ FILE    : index.html
+ PURPOSE : The HOME / LANDING page of OptiCrop. Introduces the project, explains
+           what it does, and gives the user quick-access cards to jump into any
+           of the 3 core scenarios (Recommend, Suitability Check, Research).
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | Home{% endblock %}
+
+{% block content %}
+
+<!-- ============================ HERO SECTION ============================ -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-badge"><i class="fa-solid fa-robot"></i> AIML Powered Agricultural Intelligence</span>
+        <h1>Grow Smarter with <span class="highlight">OptiCrop</span></h1>
+        <p class="hero-subtitle">
+            A data-driven Smart Agricultural Production Optimization Engine that analyzes
+            Nitrogen, Phosphorous, Potassium, temperature, humidity, soil pH, and rainfall
+            to recommend the most profitable, sustainable crop for your land.
+        </p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('recommend_form') }}" class="btn btn-primary">
+                <i class="fa-solid fa-wheat-awn"></i> Get Crop Recommendation
+            </a>
+            <a href="{{ url_for('suitability_form') }}" class="btn btn-secondary">
+                <i class="fa-solid fa-magnifying-glass-chart"></i> Check Crop Suitability
+            </a>
+        </div>
+
+        {% if not model_loaded %}
+        <div class="model-warning">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            ML Model not found. Please run <code>python model/train_model.py</code> once before using predictions.
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ============================ STATS STRIP ============================ -->
+<section class="stats-strip">
+    <div class="stat-item">
+        <h3>22</h3><p>Crops Supported</p>
+    </div>
+    <div class="stat-item">
+        <h3>2,200</h3><p>Training Data Samples</p>
+    </div>
+    <div class="stat-item">
+        <h3>7</h3><p>Environmental Factors</p>
+    </div>
+    <div class="stat-item">
+        <h3>99%+</h3><p>Model Accuracy</p>
+    </div>
+</section>
+
+<!-- ============================ SCENARIOS SECTION ============================ -->
+<section class="section">
+    <div class="section-heading">
+        <h2>Three Ways OptiCrop Helps You</h2>
+        <p>Designed for farmers, agronomists, researchers, and policymakers alike.</p>
+    </div>
+
+    <div class="card-grid">
+        <!-- Scenario 1 -->
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-user-tie"></i></div>
+            <h3>Smart Crop Recommendation</h3>
+            <p>
+                Enter your soil's N, P, K levels along with temperature, humidity,
+                pH and rainfall. Our Random Forest ML model instantly recommends
+                the most suitable crop to maximize your yield.
+            </p>
+            <a href="{{ url_for('recommend_form') }}" class="card-link">Try it now <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Scenario 2 -->
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-leaf"></i></div>
+            <h3>Crop Suitability & Environmental Assessment</h3>
+            <p>
+                Already have a crop in mind? Check whether your current soil and
+                climate conditions truly match that crop's ideal growing range,
+                factor-by-factor.
+            </p>
+            <a href="{{ url_for('suitability_form') }}" class="card-link">Check suitability <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Scenario 3 -->
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-flask-vial"></i></div>
+            <h3>Research & Policy Planning</h3>
+            <p>
+                Explore data visualizations, correlation heatmaps, and feature
+                importance charts to understand crop-environment relationships
+                for evidence-based agricultural strategy.
+            </p>
+            <a href="{{ url_for('research_dashboard') }}" class="card-link">Explore dashboard <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================ HOW IT WORKS SECTION ============================ -->
+<section class="section section-alt">
+    <div class="section-heading">
+        <h2>How OptiCrop Works</h2>
+        <p>A simple 4-step, data-driven pipeline</p>
+    </div>
+    <div class="steps-grid">
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <h4>Input Soil & Climate Data</h4>
+            <p>Enter N, P, K, temperature, humidity, pH, and rainfall values.</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <h4>Data Preprocessing</h4>
+            <p>Values are scaled and standardized using the same pipeline used in training.</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <h4>ML Model Inference</h4>
+            <p>A trained Random Forest Classifier predicts the best-suited crop(s).</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">4</div>
+            <h4>Actionable Insights</h4>
+            <p>Get clear, confidence-scored recommendations you can act on immediately.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

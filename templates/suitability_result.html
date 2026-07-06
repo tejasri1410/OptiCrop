@@ -1,0 +1,112 @@
+<!--
+====================================================================================
+ FILE    : suitability_result.html
+ PURPOSE : Shows the factor-by-factor suitability breakdown for the crop the
+           user selected on suitability.html, an overall suitability score,
+           and (as a bonus cross-check) what our ML model would have
+           recommended instead, given the exact same soil/climate data.
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | Suitability Result{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-page-header">
+        <span class="page-badge"><i class="fa-solid fa-magnifying-glass-chart"></i> Assessment Result</span>
+        <h1>Suitability Report for {{ selected_crop }}</h1>
+        <p>Here's how your current soil and climate conditions compare to the ideal
+           growing requirements for {{ selected_crop }}.</p>
+    </div>
+
+    <!-- ============================ OVERALL SCORE CARD ============================ -->
+    <div class="result-hero-card
+        {% if suitability_score >= 70 %}score-good
+        {% elif suitability_score >= 40 %}score-medium
+        {% else %}score-poor{% endif %}">
+        <div class="result-hero-icon">
+            {% if suitability_score >= 70 %}
+                <i class="fa-solid fa-circle-check"></i>
+            {% elif suitability_score >= 40 %}
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            {% else %}
+                <i class="fa-solid fa-circle-xmark"></i>
+            {% endif %}
+        </div>
+        <h2>{{ suitability_score }}% Suitable</h2>
+        <p class="result-confidence">
+            {% if suitability_score >= 70 %}
+                Great news! Your conditions are highly favorable for {{ selected_crop }}.
+            {% elif suitability_score >= 40 %}
+                Your conditions are partially suitable. Some factors may need improvement.
+            {% else %}
+                Your conditions are not well suited for {{ selected_crop }}. Consider the alternative below.
+            {% endif %}
+        </p>
+        <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" style="width: {{ suitability_score }}%;"></div>
+        </div>
+    </div>
+
+    <!-- ============================ FACTOR-BY-FACTOR BREAKDOWN ============================ -->
+    <div class="section-heading" style="margin-top:3rem;">
+        <h2>Factor-by-Factor Breakdown</h2>
+        <p>Comparing your inputs against the ideal agronomic range for {{ selected_crop }}</p>
+    </div>
+
+    <div class="table-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Factor</th>
+                    <th>Your Value</th>
+                    <th>Ideal Range</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in breakdown %}
+                <tr>
+                    <td>{{ item.feature }}</td>
+                    <td>{{ item.user_value }}</td>
+                    <td>{{ item.ideal_range }}</td>
+                    <td>
+                        {% if item.is_suitable %}
+                            <span class="status-pill status-good"><i class="fa-solid fa-check"></i> {{ item.status }}</span>
+                        {% else %}
+                            <span class="status-pill status-bad"><i class="fa-solid fa-xmark"></i> {{ item.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============================ ML CROSS-CHECK SUGGESTION ============================ -->
+    {% if ml_suggestion %}
+    <div class="info-note info-note-highlight" style="margin-top: 2.5rem;">
+        <i class="fa-solid fa-robot"></i>
+        <p>
+            <strong>AI Cross-Check:</strong> Based on the exact same data, our Machine Learning
+            model's top recommendation would actually be <strong>{{ ml_suggestion.crop }}</strong>
+            (confidence: {{ ml_suggestion.confidence }}%).
+            {% if ml_suggestion.crop.lower() != selected_crop.lower() %}
+                You may want to consider this alternative for potentially better yield.
+            {% else %}
+                This matches your chosen crop, reinforcing your selection is a strong choice!
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="hero-buttons" style="margin-top: 2.5rem;">
+        <a href="{{ url_for('suitability_form') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-rotate-left"></i> Check Another Crop
+        </a>
+        <a href="{{ url_for('recommend_form') }}" class="btn btn-primary">
+            <i class="fa-solid fa-wheat-awn"></i> Get a Fresh Recommendation
+        </a>
+    </div>
+</section>
+{% endblock %}

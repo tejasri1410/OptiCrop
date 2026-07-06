@@ -1,0 +1,81 @@
+<!--
+====================================================================================
+ FILE    : result.html
+ PURPOSE : Displays the ML model's crop recommendation result after a farmer
+           submits the form on recommend.html. Shows the #1 best crop prominently,
+           plus the top-3 alternatives with confidence percentages, and a summary
+           of the inputs the user provided for transparency.
+====================================================================================
+-->
+{% extends "base.html" %}
+{% block title %}OptiCrop | Recommendation Result{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="form-page-header">
+        <span class="page-badge"><i class="fa-solid fa-circle-check"></i> Analysis Complete</span>
+        <h1>Your Recommended Crop</h1>
+        <p>Based on the soil and climate data you provided, here is what our AI model found.</p>
+    </div>
+
+    <!-- ============================ TOP RESULT CARD ============================ -->
+    <div class="result-hero-card">
+        <div class="result-hero-icon"><i class="fa-solid fa-award"></i></div>
+        <h2>{{ best_crop.crop }}</h2>
+        <p class="result-confidence">Confidence Score: <strong>{{ best_crop.confidence }}%</strong></p>
+        <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" style="width: {{ best_crop.confidence }}%;"></div>
+        </div>
+    </div>
+
+    <!-- ============================ TOP 3 ALTERNATIVES ============================ -->
+    <div class="section-heading" style="margin-top:3rem;">
+        <h2>Top Alternative Crops</h2>
+        <p>Other crops that are also a good statistical match for your conditions</p>
+    </div>
+
+    <div class="card-grid card-grid-3">
+        {% for crop in top_crops %}
+        <div class="rank-card {% if loop.index == 1 %}rank-card-best{% endif %}">
+            <span class="rank-badge">#{{ loop.index }}</span>
+            <h3>{{ crop.crop }}</h3>
+            <div class="confidence-bar-track small">
+                <div class="confidence-bar-fill" style="width: {{ crop.confidence }}%;"></div>
+            </div>
+            <p>{{ crop.confidence }}% match</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ============================ INPUT SUMMARY TABLE ============================ -->
+    <div class="section-heading" style="margin-top:3rem;">
+        <h2>Your Submitted Data</h2>
+        <p>For reference & transparency</p>
+    </div>
+
+    <div class="table-card">
+        <table class="data-table">
+            <thead>
+                <tr><th>Factor</th><th>Value You Entered</th></tr>
+            </thead>
+            <tbody>
+                {% for key, value in user_inputs.items() %}
+                <tr>
+                    <td>{{ feature_labels[key] }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="hero-buttons" style="margin-top: 2.5rem;">
+        <a href="{{ url_for('recommend_form') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-rotate-left"></i> Try Another Prediction
+        </a>
+        <a href="{{ url_for('suitability_form') }}" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Verify Suitability
+        </a>
+    </div>
+</section>
+{% endblock %}
